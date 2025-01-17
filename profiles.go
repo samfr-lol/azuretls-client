@@ -1,10 +1,11 @@
 package azuretls
 
 import (
+	"math/rand"
+
 	"github.com/Noooste/fhttp/http2"
 	tls "github.com/Noooste/utls"
 	"github.com/Noooste/utls/dicttls"
-	"math/rand"
 )
 
 // GetBrowserClientHelloFunc returns a function that returns a ClientHelloSpec for a specific browser
@@ -48,11 +49,19 @@ func getShuffledExtensions(extensions []tls.TLSExtension) []tls.TLSExtension {
 func GetLastChromeVersion() *tls.ClientHelloSpec {
 	extensions := []tls.TLSExtension{
 		// &tls.UtlsGREASEExtension{},
-		&tls.KeyShareExtension{KeyShares: []tls.KeyShare{
-			{Group: tls.CurveID(tls.GREASE_PLACEHOLDER), Data: []byte{0}},
-			{Group: tls.X25519MLKEM768},
-			{Group: tls.X25519},
-		}},
+		&tls.KeyShareExtension{
+			KeyShares: []tls.KeyShare{
+				{
+					Group: tls.X25519MLKEM768,
+				},
+				{
+					Group: tls.X25519,
+				},
+				{
+					Group: tls.CurveP256,
+				},
+			},
+		},
 		&tls.ALPNExtension{AlpnProtocols: []string{
 			http2.NextProtoTLS,
 			"http/1.1",
@@ -307,6 +316,9 @@ func GetLastFirefoxVersion() *tls.ClientHelloSpec {
 			},
 			&tls.KeyShareExtension{
 				KeyShares: []tls.KeyShare{
+					{
+						Group: tls.X25519MLKEM768,
+					},
 					{
 						Group: tls.X25519,
 					},
