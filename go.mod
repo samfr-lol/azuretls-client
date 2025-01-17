@@ -1,4 +1,4 @@
-module github.com/Noooste/azuretls-client
+module github.com/samfr-lol/azuretls-client
 
 go 1.22.0
 
